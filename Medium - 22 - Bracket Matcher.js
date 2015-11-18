@@ -1,23 +1,20 @@
 function BracketMatcher(str) {
-
-    var leftCount = 0;
-    var rightCount = 0;
-
-    for (var i = 0; i < str.length; i++) {
-        if (str[i] == "(") {
-            leftCount++;
-        } else if (str[i] == ")") {
-            rightCount++;
-        }
-        if (rightCount > leftCount) {
-            return 0;
-        }
+  var openBrackets = [];
+  for (var i = 0; i < str.length; i++) {
+    var c = str[i];
+    if (c == '(' || c == '[') {
+      openBrackets.push(c);
     }
-
-    if (leftCount == rightCount) {
-        return 1;
-    } else {
+    else if (c == ')' || c == ']') {
+      var lastOpenBracket = openBrackets.pop();
+      if ((c == ')' && lastOpenBracket != '(') ||
+          (c == ']' && lastOpenBracket != '[') )
         return 0;
     }
+  }
 
+  if (openBrackets.length > 0)
+    return 0;
+  else
+    return 1;
 }
