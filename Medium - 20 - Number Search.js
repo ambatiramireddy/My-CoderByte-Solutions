@@ -1,21 +1,18 @@
 function NumberSearch(str) { 
-
-  var notAlpha = /[^a-zA-Z]/g;
-  var notNum = /[^0-9]/g;
-  var sum = 0;
-  var alphaCount = 0;
-  
-  var strAlpha = str.replace(notAlpha, "");
-  var strNum = str.replace(notNum, "");
-  
-  for (i=0;i<strAlpha.length;i++) {
-    alphaCount++;
+  var letterCount=0;
+  var numbers=[0];
+  for(var i=0;i<str.length;i++)
+  {
+    var c=str[i];
+    if((c>='a' && c<='z') || (c>='A' && c<='Z'))
+      letterCount++;
+    else
+    {
+      var n=parseInt(c);
+      if(n)
+       numbers.push(n);
+    }
   }
- 
-  for (i=0;i<strNum.length;i++) {
-    sum += parseInt(strNum[i]);
-  }
-  
-  return Math.round(sum/alphaCount);
-         
+  var sum=numbers.reduce(function(pv,v){return pv+v;})
+  return Math.round(sum/letterCount);         
 }
