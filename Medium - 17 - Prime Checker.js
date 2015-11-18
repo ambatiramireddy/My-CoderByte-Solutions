@@ -1,60 +1,42 @@
-function PrimeChecker(num) {
-
-    function permute(num) {
-
-        num = num.toString().split("");
-        var answerArr = [];
-        var outerLength = num.length;
-        var innerLength = 1;
-        var startItem;
-        var moveItem;
-        for (i = 1; i < num.length; i++) {
-            innerLength *= i;
-        }
-
-        for (i = 0; i < outerLength; i++) {
-            startItem = num[i];
-            num.splice(i, 1);
-
-            for (j = 0; j < innerLength+1; j++) {
-
-                moveItem = num.shift();
-                num.splice(j, 0, moveItem);
-            if (j<innerLength) {
-            answerArr.push(parseInt(startItem + num.join("")));
-        }
-            }
-            num.splice(i, 0, startItem);
-        }
-        return answerArr;
-    }
-
-    function isPrime(num) {
-        
-        for (i = 2; i < num; i++) {
-            if (num % i === 0) {
-                return false;
-            }
-        }
-      if (num == 1) {
+function IsPrimeNumber(num) {
+  if (num <= 1)
+    return false;
+  for (var i = 2; i < num; i++) {
+    if (num % i == 0)
       return false;
+  }
+  return true;
+}
+
+function PrimeChecker(num) {
+  var arr = num.toString().split('');
+  var usedChars = [];
+  var prime = false;
+  function permute() {
+
+    if (prime)
+      return;
+
+    var ch;
+    for (var i = 0; i < arr.length; i++) {
+      ch = arr.splice(i, 1)[0];
+      usedChars.push(ch);
+      if (arr.length == 0) {
+        var n = parseInt(usedChars.join(''))
+        prime = IsPrimeNumber(n);
+        if (prime)
+          return;
       }
-      else {
-        return true;
-      }
+      permute(arr);
+      arr.splice(i, 0, ch);
+      usedChars.pop();
     }
+  }
 
+  permute();
 
-    var possibleCombos = permute(num);
-    var foundPerms = 0;
-    
-    for (k = 0; k < possibleCombos.length; k++) {
-
-        if (isPrime(possibleCombos[k])) {
-            foundPerms = 1;
-        }
-
-    }
-
-return foundPerms;
+  if (prime)
+    return 1;
+  else
+    return 0;
 }
