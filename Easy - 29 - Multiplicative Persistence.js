@@ -1,28 +1,20 @@
-function MultiplicativePersistence(num) {
-  
-    var multiPer = 0;
-  
-    function splitArray(intN) {
-        intN = intN.toString().split("");
-        var answerArr = [];
-        for (i = 0; i < intN.length; i++) {
-            answerArr.push(parseInt(intN[i]));
-        }
-        return answerArr;
+function MultiplicativePersistence(num) { 
+  var multiplicativeCount = 0;
+  function Multiply(num) {
+    var result = 1;
+    var arr = num.toString().split('');
+    for (var i = 0; i < arr.length; i++) {
+      result *= parseInt(arr[i]);
     }
-    function mult(array) {
-        var product = 1;
-        for (i = 0; i < array.length; i++) {
-            product *= array[i];
-        }
-        return product;
-    }
+	  multiplicativeCount++;
+    if (result > 9)
+      Multiply(result);
+  }
 
-    while (num.toString().length > 1) {
-        num = splitArray(num);
-        num = mult(num);
-        multiPer++;
-    }
-  
-    return multiPer;
+  if (num <= 9)
+    return 0;
+  else {
+    Multiply(num);
+    return multiplicativeCount;
+  }
 }
