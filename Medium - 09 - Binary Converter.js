@@ -1,17 +1,8 @@
 function BinaryConverter(str) { 
-
-  str = str.split("").reverse();
-  var sum = 0;
-  if (str[0]==1) {
-  sum += 1;
+  var decimal=0;
+  for(var i=str.length-1,j=0;i>=0;i--,j++)
+  {
+    decimal+=parseInt(str[i])*Math.pow(2,j);
   }
-  
-  for(i=1;i<str.length;i++) {
-    if (str[i]==1){    
-    sum += Math.pow(2,i);
-    }
-    }
-    
-  return sum; 
-         
+  return decimal;        
 }
