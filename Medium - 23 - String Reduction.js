@@ -1,40 +1,33 @@
-function StringReduction(str) { 
-  
-  str = str.split("");
-  
-  function notAllSame() {
-    for (var j = 0; j < str.length; j++) {
-      if (str[0] === str[j]) {
-        continue;
+function StringReduction(str) {
+  var arr = str.split('');
+
+  function Reduce() {
+    var reduceCount = 0,c3;
+    for (var i = 0; i < arr.length - 1; i++) {
+      var c1 = arr[i];
+      var c2 = arr[i + 1];
+      if (c1 == 'a' && (c2 == 'b' || c2 == 'c')) {
+        c3 = (c2 == 'b') ? 'c' : 'b';
       }
-      else {
-        return true;
+      else if (c1 == 'b' && (c2 == 'c' || c2 == 'a')) {
+        c3 = (c2 == 'c') ? 'a' : 'c';
       }
-    }
-    return false;
-  }
-  
-  while (notAllSame()) {
-    for (var i = 0; i < str.length; i++) {
-      if (str[i] + str[i+1] == "ab") {
-        str.splice(i,2,"c");
+      else if (c1 == 'c' && (c2 == 'a' || c2 == 'b')) {
+        c3 = (c2 == 'a') ? 'b' : 'a';
       }
-      if ((str[i] === "a") && (str[i+1] == "c")) {
-        str.splice(0,2,"b");
-      }
-      if ((str[i] === "b") && (str[i+1] == "c")) {
-        str.splice(i,2,"a");
-      }
-      if ((str[i] === "b") && (str[i+1] == "a")) {
-        str.splice(i,2,"c");
-      }
-      if ((str[i] === "c") && (str[i+1] == "b")) {
-        str.splice(i,2,"a");
-      }
-      if ((str[i] === "c") && (str[i+1] == "a")) {
-        str.splice(i,2,"b");
+
+      if (c3) {
+        reduceCount++;
+        arr.splice(i, 2, c3);
       }
     }
+
+    if (reduceCount == 0)
+      return;
+    else
+      Reduce();
   }
-  return str.length;
+
+  Reduce();
+  return arr.length;
 }
