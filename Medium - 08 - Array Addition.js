@@ -1,34 +1,21 @@
-function ArrayAddition(arr) { 
+function ArrayAddition(arr) {
+    var largest = arr.sort(function (a, b) {
+        return a - b;
+    }).pop();
 
-  var largest = arr.sort(function(a,b){return a-b}).pop();
-  var sum = 0;
-  
-  for (var i = 0; i < arr.length; i++) {
-    sum += arr[i];
-    if (sum===largest) {
-      return true;
+    //to iterate through all possible subsets of the array
+    var ps = [[]];
+    for (var i = 0; i < arr.length; i++) {
+        for (var j = 0, len = ps.length; j < len; j++) {
+            var subset = ps[j].concat(arr[i]);
+            if (subset.length > 1 && subset.reduce(function (pv, v) { return pv + v; }) === largest) {
+                return true;
+            }
+            else {
+                ps.push(subset);
+            }
+        }
     }
-    
-    for (var j = 0; j < arr.length; j++) {
-      if (j!==i) {
-        sum += arr[j];
-      }
-      if (sum===largest) {
-      return true;
-      }
-    }
-    
-    for (var k = 0; k < arr.length; k++) {
-      if (k !== i) {
-        sum -= arr[k];
-      }
-      if (sum===largest) {
-        return true;
-      }
-    }
-    
-    sum = 0;
-  }
-  
-  return false;      
+
+  return false;
 }
