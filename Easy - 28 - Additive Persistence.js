@@ -1,29 +1,20 @@
-function AdditivePersistence(num) {
-
-    var addPer = 0;
-
-    function splitArray(intN) {
-        intN = intN.toString().split("");
-        var answerArr = [];
-        for (var i = 0; i < intN.length; i++) {
-            answerArr.push(parseInt(intN[i]));
-        }
-        return answerArr;
+function AdditivePersistence(num) { 
+  var additiveCount = 0;
+  function Add(num) {
+    var result = 0;
+    var arr = num.toString().split('');
+    for (var i = 0; i < arr.length; i++) {
+      result += parseInt(arr[i]);
     }
+    additiveCount++;
+    if (result > 9)
+      Add(result);
+  }
 
-    function add(array) {
-        var sum = 0;
-        for (var i = 0; i < array.length; i++) {
-            sum += array[i];
-        }
-        return sum;
-    }
-
-    while (num.toString().length > 1) {
-        num = splitArray(num);
-        num = add(num);
-        addPer++;
-    }
-
-    return addPer;
+  if (num <= 9)
+    return 0;
+  else {
+    Add(num);
+    return additiveCount;
+  }
 }
