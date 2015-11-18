@@ -1,13 +1,12 @@
 function Consecutive(arr) { 
-
-  arr = arr.sort(function(a,b){return a-b});
-  var diffArr = [];
-  var diffArrSum = 0;
-  for(i=0;i<arr.length-1;i++) {
-  diffArr.push((arr[i+1]-arr[i])-1);
+  arr.sort(function(a,b) {return a-b;});
+  var minValue=arr[0];
+  var maxValue=arr[arr.length-1];
+  var missingCount=0;
+  for(var i=minValue;i<=maxValue;i++)
+  {
+    if(arr.indexOf(i)==-1)
+      missingCount++;
   }
-  for(i=0;i<diffArr.length;i++) {
-  diffArrSum+=diffArr[i];
-  }
-  return diffArrSum;     
+  return missingCount;
 }
