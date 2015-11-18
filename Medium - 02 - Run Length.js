@@ -1,15 +1,15 @@
 function RunLength(str) {
-
-    var count = 1;
-    var result = "";
-
-    for (var i = 0; i < str.length; i++) {
-        if (str[i] === str[i + 1]) {
-            count++;
-        } else {
-            result += count + str[i];
-            count = 1;
-        }
+  var runChar = str[0], runCount = 1, res = '';
+  for (var i = 1; i < str.length; i++) {
+    if (runChar == str[i]) {
+      runCount++;
     }
-    return result;
+    else {
+      res += runCount + runChar;
+      runChar = str[i];
+      runCount = 1;
+    }
+  }
+  res += runCount + runChar;
+  return res;
 }
