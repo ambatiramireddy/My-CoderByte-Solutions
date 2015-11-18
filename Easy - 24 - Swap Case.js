@@ -1,16 +1,15 @@
-function SwapCase(str) {
-
-    var answer = "";
-
-    for (var i = 0; i < str.length; i++) {
-        if (str[i] === str[i].toUpperCase()) {
-            answer += str[i].toLowerCase();
-        } else if (str[i] === str[i].toLowerCase()) {
-            answer += str[i].toUpperCase();
-        } else {
-            answer += str[i];
-        }
+function SwapCase(str) { 
+  var result = '';
+  for (var i = 0; i < str.length; i++) {
+    var c = str[i];
+    if (c >= 'a' && c <= 'z') {
+      result += c.toUpperCase();
     }
-
-    return answer;
+    else if (c >= 'A' && c <= 'Z') {
+      result += c.toLowerCase();
+    }
+    else
+      result += c;
+  }
+  return result;
 }
