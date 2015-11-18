@@ -1,37 +1,23 @@
 function LetterCount(str) { 
+  var words = str.match(/\w+/g);
+  var duplicateCount = 0, largestDuplicateCount = 0, largestDuplicateIndex = 0;
+  for (var i = 0; i < words.length; i++) {
+    var distinct = []
+    var word=words[i];
+    for (var j = 0; j < word.length; j++) {
+      var char = word[j];
+      if (distinct.indexOf(char) == -1)
+        distinct.push(char);
+    }
+    duplicateCount = word.length - distinct.length;
+    if (duplicateCount > largestDuplicateCount) {
+      largestDuplicateCount = duplicateCount;
+      largestDuplicateIndex = i;
+    }
+  }
 
-  var wordArr = str.split(" ");
-  var currentDif = 0;
-  var largestDif = 0;
-  var answer;
-  var currentWord;
-  var currentWordLength;
-  var currentWordR;
-  var currentWordRLength;
-  
-  for (i=0;i<wordArr.length;i++) {
-  currentWord = wordArr[i].split("").sort();
-  currentWordLength = currentWord.length;
-    for (j=0;j<currentWordLength-1;j++) {
-      if (currentWord[j]===currentWord[j+1]) {
-      currentWord.splice(j,1);
-      }
-    }
-  currentWordR = currentWord;
-  currentWordRLength = currentWordR.length;
-  currentDif = (currentWordLength - currentWordRLength);
-  
-    if (currentDif>largestDif) {
-    largestDif = currentDif;
-    answer = wordArr[i];
-    }
-  
-  }
-  if (largestDif>0) {
-  return answer;
-  }
-  else {
-  return -1;
-  }
-         
+  if (largestDuplicateCount == 0)
+    return -1;
+  else
+    return words[largestDuplicateIndex];
 }
