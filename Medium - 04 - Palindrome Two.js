@@ -1,9 +1,16 @@
 function PalindromeTwo(str) { 
-  var strFor = str.replace(/[^a-zA-Z]/g, "").toLowerCase();
-  var strRev =  str.replace(/[^a-zA-Z]/g, "").split("").reverse().join("").toLowerCase();
-  return strFor === strRev;
-}
+  var input = '', reverse = '';
+  for (var i = 0; i < str.length; i++) {
+    var c = str[i];
+    //to ignore spaces and symbols in the input string
+    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+      input = input + c;
+      reverse = c + reverse;
+    }
+  }
 
-function PalindromeTwo(str) { 
-  return str.replace(/[^a-zA-Z]/g, "").toLowerCase() === str.replace(/[^a-zA-Z]/g, "").split("").reverse().join("").toLowerCase();
+  if (input.toLowerCase() === reverse.toLowerCase())
+    return 'true';
+  else
+    return 'false';        
 }
