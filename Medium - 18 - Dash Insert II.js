@@ -1,18 +1,19 @@
 function DashInsertII(num) { 
-
-  num = num.toString().split("");
-  var answer = "";
-  for (i=0;i<num.length;i++) {
-    if ((num[i]%2===1) && (num[i+1]%2===1)) {
-    answer += num[i] + "-";
+  var arr = num.toString().split('');
+  var result = '';
+  for (var i = 0; i < arr.length - 1; i++) {
+    var i1 = parseInt(arr[i]);
+    var i2 = parseInt(arr[i + 1]);
+    if (i1 != 0 && i2 != 0) {
+      if (i1 % 2 == 0 && i2 % 2 == 0)
+        result += i1 + '*';
+      else if (i1 % 2 != 0 && i2 % 2 != 0)
+        result += i1 + '-';
+      else
+        result += i1;
     }
-    else if ((num[i]!=0) && (num[i+1]!=0) && (num[i]%2===0) && (num[i+1]%2===0)) {
-    answer += num[i] + "*";
-    }
-    else {
-    answer += num[i];
-    }
+    else
+      result += i1;
   }
-  return answer; 
-         
+  return result + arr[arr.length - 1];
 }
