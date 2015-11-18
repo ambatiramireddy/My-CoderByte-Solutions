@@ -1,0 +1,35 @@
+function parseRectangle(rectangle) {
+  var left = parseInt(rectangle[0].split(',')[0]);
+  var right = parseInt(rectangle[2].split(',')[0]);
+  var top = parseInt(rectangle[0].split(',')[1]);
+  var bottom = parseInt(rectangle[1].split(',')[1]);
+  if (top > bottom) {
+    var temp = top;
+    top = bottom;
+    bottom = temp;
+  }
+  return { left: left, right: right, top: top, bottom: bottom };
+}
+
+function OverlappingRectangles(strArr) {
+  var matches = strArr[0].match(/-?\d+,-?\d+/g);
+  var rectangle1 = matches.splice(0, 4);
+  rectangle1.sort(function (a, b) { return a.split(',')[0] - b.split(',')[0]; });
+  var rectangle2 = matches;
+  rectangle2.sort(function (a, b) { return a.split(',')[0] - b.split(',')[0]; });
+
+  var r1 = parseRectangle(rectangle1);
+  var r2 = parseRectangle(rectangle2);
+  var r1Width = r1.right - r1.left;
+  var r1Height = r1.bottom - r1.top;
+  var r1Area = r1Width * r1Height;
+
+  var overlapWidth = (r1.right > r2.right) ? r2.right - r1.left : r1.right - r2.left;
+  var overlapHeight = (r1.bottom > r2.bottom)? r2.bottom - r1.top : r1.bottom - r2.top;
+  var overlapArea = overlapWidth * overlapHeight;
+
+  if (overlapArea == 0)
+    return 0;
+  else
+    return parseInt(r1Area / overlapArea);
+}
