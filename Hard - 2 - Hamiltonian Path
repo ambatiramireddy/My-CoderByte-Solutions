@@ -1,0 +1,14 @@
+function HamiltonianPath(strArr) {
+  var inIndices = strArr[0].replace(/[\(,\)]/g, '').split('');
+  var edges= strArr[1].replace(/[\(\)]/g, '').split(',');
+  var outIndices = strArr[2].replace(/[\(,\)]/g, '').split('');
+
+  for (var i = 0; i < outIndices.length - 1; i++) {
+
+    var edgeR = outIndices[i] + '-' + outIndices[i + 1];
+    var edgeL = outIndices[i + 1] + '-' + outIndices[i];
+    if (edges.indexOf(edgeR) == -1 && edges.indexOf(edgeL) == -1)
+      return outIndices[i];
+  }
+  return 'yes';
+}
