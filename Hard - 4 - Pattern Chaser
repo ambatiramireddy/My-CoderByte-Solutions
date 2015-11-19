@@ -1,7 +1,7 @@
 function PatternChaser(str) {
   var patterns = [];
   var i = 2; j = Math.floor(str.length / 2);
-  while (i < j) {
+  while (i <= j) {
     FindPattern(i++);
   }
 
