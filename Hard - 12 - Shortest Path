@@ -1,4 +1,4 @@
-//Have Improved the following solution https://github.com/wezleytsai/coderbyte/edit/master/hard%2003%20-%20shortest%20path.js
+//Improved the following solution a bit (https://github.com/wezleytsai/coderbyte/edit/master/hard%2003%20-%20shortest%20path.js)
 function ShortestPath(strArr) {
   var nodeCount = Number(strArr.splice(0, 1));
   var nodes = strArr.splice(0, nodeCount);
@@ -6,10 +6,11 @@ function ShortestPath(strArr) {
   var startNode = nodes[0];
   var endNode = nodes[nodes.length - 1];
 
-  if (strArr.indexOf(startNode + '-' + endNode) != -1)
-    return startNode + '-' + endNode;
+  var bestPath = startNode + '-' + endNode;
+  if (strArr.indexOf(bestPath) != -1)
+    return bestPath;
 
-  var paths = []; possibleNodes = [];
+  var paths = [];
   findPaths([startNode]);
 
   function findPaths(pathSoFar) {
