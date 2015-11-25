@@ -24,23 +24,13 @@ function SymmetricMatrix(strArr) {
   //to check if no.of rows and columns are euual
   if (arr[0].length != arr.length)
     return 'not possible';
-
-  //to find transpose
-  var transposeArray = [];
-  for (var colIndex = 0; colIndex < arr.length; colIndex++) {
-    var temp = [];
-    for (var rowIndex = 0; rowIndex < arr.length; rowIndex++) {
-      temp.push(arr[rowIndex][colIndex]);
-    }
-    transposeArray.push(temp);
-  }
-
-  //to compare input array and its transpose
+  
+  //if a matrix equal to its transpose, then its symmetric
+  //to compare if nth row values are equal to nth column values
   for (var rowIndex = 0; rowIndex < arr.length; rowIndex++) {
     var arrRow = arr[rowIndex];
-    var transposeArrRow = transposeArray[rowIndex];
     for (var colIndex = 0; colIndex < arr.length; colIndex++) {
-      if (arrRow[colIndex] != transposeArrRow[colIndex])
+      if (arrRow[colIndex] != arr[colIndex][rowIndex])
         return 'not symmetric';
     }
   }
