@@ -1,0 +1,47 @@
+//Have Improved the following solution https://github.com/wezleytsai/coderbyte/edit/master/hard%2003%20-%20shortest%20path.js
+function ShortestPath(strArr) {
+  var nodeCount = Number(strArr.splice(0, 1));
+  var nodes = strArr.splice(0, nodeCount);
+  var connections = strArr.map(function (v) { return v.split('-'); })
+  var startNode = nodes[0];
+  var endNode = nodes[nodes.length - 1];
+
+  if (strArr.indexOf(startNode + '-' + endNode) != -1)
+    return startNode + '-' + endNode;
+
+  var paths = []; possibleNodes = [];
+  findPaths([startNode]);
+
+  function findPaths(pathSoFar) {
+    // pathSoFar = [a, b, ... n] where a is starting point and n is current node
+    var currentNode = pathSoFar[pathSoFar.length - 1];
+
+    if (currentNode === endNode) { // if(current == endNode), path complete
+      paths.push(pathSoFar.slice());
+      return;
+    }
+
+    for (var i = 0; i < connections.length; i++) {
+      var connection = connections[i];
+      if (connection[0] === currentNode || connection[1] === currentNode) {
+        if (connection[1] === currentNode) { // rearrange connection
+          var temp = connection[0];
+          connection[0] = connection[1];
+          connection[1] = temp;
+        }
+
+        if (pathSoFar.indexOf(connection[1]) === -1) {
+          pathSoFar.push(connection[1]);
+          findPaths(pathSoFar.slice());
+          pathSoFar.pop();
+        }
+      }
+    }
+  };
+
+  var shortestPathNodes = paths.sort(function (a, b) { return b.length - a.length; }).pop();
+  if (shortestPathNodes)
+    return shortestPathNodes.join('-');
+  else
+    return -1;
+}
