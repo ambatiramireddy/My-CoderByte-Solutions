@@ -1,0 +1,49 @@
+function SymmetricMatrix(strArr) {
+  var arr = [], startIndex = 0, prevRowLength = 0;
+  for (var i = 0; i < strArr.length; i++) {
+    var item = strArr[i];
+    if (item == '<>') {
+      var row = strArr.slice(startIndex, i);
+      prevRowLength = (prevRowLength == 0) ? row.length : prevRowLength;
+      //to determine if input matrix is a square matrix
+      if (row.length == 1 || row.length != prevRowLength)
+        return 'not possible';
+      else {
+        arr.push(row);
+        startIndex = i + 1;
+      }
+    }
+  }
+  //to add last row as there wont be '<>' symbol at end
+  var row = strArr.slice(startIndex);
+  if (row.length == 1 || row.length != prevRowLength)
+    return 'not possible';
+  else {
+    arr.push(row);
+  }
+  //to check if no.of rows and columns are euual
+  if (arr[0].length != arr.length)
+    return 'not possible';
+
+  //to find transpose
+  var transposeArray = [];
+  for (var colIndex = 0; colIndex < arr.length; colIndex++) {
+    var temp = [];
+    for (var rowIndex = 0; rowIndex < arr.length; rowIndex++) {
+      temp.push(arr[rowIndex][colIndex]);
+    }
+    transposeArray.push(temp);
+  }
+
+  //to compare input array and its transpose
+  for (var rowIndex = 0; rowIndex < arr.length; rowIndex++) {
+    var arrRow = arr[rowIndex];
+    var transposeArrRow = transposeArray[rowIndex];
+    for (var colIndex = 0; colIndex < arr.length; colIndex++) {
+      if (arrRow[colIndex] != transposeArrRow[colIndex])
+        return 'not symmetric';
+    }
+  }
+
+  return 'symmetric';
+}
