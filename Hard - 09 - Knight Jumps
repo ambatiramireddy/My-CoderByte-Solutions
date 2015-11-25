@@ -20,7 +20,7 @@ function KnightJumps(str) {
       var modifiedTrueCount = results.filter(function (v) { return v == true; }).length;
       if (trueCount == 3)
           return modifiedTrueCount == 4 ? 6 : 4;
-      else if (trueCount == 2)
+      else
           return modifiedTrueCount;
   }
 }
