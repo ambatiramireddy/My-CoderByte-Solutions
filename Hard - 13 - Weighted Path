@@ -5,48 +5,41 @@ function WeightedPath(strArr) {
   var startNode = nodes[0];
   var endNode = nodes[nodes.length - 1];
 
-  var paths = [], pathsWeights = [], pathWeight = [];
-  findPaths([startNode]);
+  var paths = [], pathWeights = [];
+  findPaths([startNode], []);
 
-  function findPaths(pathSoFar) {
-    // pathSoFar = [a, b, ... n] where a is starting point and n is current node
+  function findPaths(pathSoFar, weightSoFar) {
+    // pathSoFar = [a, b, ... n] where a is start node and n is current node
     var currentNode = pathSoFar[pathSoFar.length - 1];
-
     if (currentNode === endNode) { // if(current == endNode), path complete
       paths.push(pathSoFar.slice());
-      pathsWeights.push(pathWeight.slice());
-      pathWeight = [];
+      pathWeights.push(weightSoFar.slice());
       return;
     }
 
     for (var i = 0; i < connections.length; i++) {
       var connection = connections[i];
       if (currentNode === connection[0] || currentNode === connection[1]) {
-        if (currentNode === connection[1]) { // rearrange connection
-          var temp = connection[0];
-          connection[0] = connection[1];
-          connection[1] = temp;
-        }
-
-        if (pathSoFar.indexOf(connection[1]) === -1) {
-          pathSoFar.push(connection[1]);
-          pathWeight.push(Number(connection[2]));
-          findPaths(pathSoFar.slice());
+        var nextNode = (currentNode === connection[0]) ? connection[1] : connection[0];
+        if (pathSoFar.indexOf(nextNode) === -1) {
+          pathSoFar.push(nextNode);
+          weightSoFar.push(Number(connection[2]));
+          findPaths(pathSoFar.slice(), weightSoFar.slice());
           pathSoFar.pop();
-          pathWeight.pop();
+          weightSoFar.pop();
         }
       }
     }
   };
 
   if (paths.length > 0) {
-    pathsWeights = pathsWeights.map(function (element) {
+    pathWeights = pathWeights.map(function (element) {
       return element.reduce(function (pv, v) { return pv + v; });
     });
 
-    var minWeight = pathsWeights[0]; minWeightIndex = 0;
-    for (var i = 1; i < pathsWeights.length; i++) {
-      var weight = pathsWeights[i];
+    var minWeight = pathWeights[0]; minWeightIndex = 0;
+    for (var i = 1; i < pathWeights.length; i++) {
+      var weight = pathWeights[i];
       if (weight < minWeight) {
         minWeight = weight
         minWeightIndex = i;
