@@ -1,4 +1,4 @@
-//Improved the following solution a bit (https://github.com/wezleytsai/coderbyte/edit/master/hard%2003%20-%20shortest%20path.js)
+//Referred and improved the following solution https://github.com/wezleytsai/coderbyte/edit/master/hard%2003%20-%20shortest%20path.js
 function ShortestPath(strArr) {
   var nodeCount = Number(strArr.splice(0, 1));
   var nodes = strArr.splice(0, nodeCount);
@@ -16,7 +16,6 @@ function ShortestPath(strArr) {
   function findPaths(pathSoFar) {
     // pathSoFar = [a, b, ... n] where a is starting point and n is current node
     var currentNode = pathSoFar[pathSoFar.length - 1];
-
     if (currentNode === endNode) { // if(current == endNode), path complete
       paths.push(pathSoFar.slice());
       return;
@@ -24,15 +23,10 @@ function ShortestPath(strArr) {
 
     for (var i = 0; i < connections.length; i++) {
       var connection = connections[i];
-      if (connection[0] === currentNode || connection[1] === currentNode) {
-        if (connection[1] === currentNode) { // rearrange connection
-          var temp = connection[0];
-          connection[0] = connection[1];
-          connection[1] = temp;
-        }
-
-        if (pathSoFar.indexOf(connection[1]) === -1) {
-          pathSoFar.push(connection[1]);
+      if (currentNode === connection[0] || currentNode === connection[1]) {
+        var nextNode = (currentNode === connection[0]) ? connection[1] : connection[0];
+        if (pathSoFar.indexOf(nextNode) === -1) {
+          pathSoFar.push(nextNode);
           findPaths(pathSoFar.slice());
           pathSoFar.pop();
         }
