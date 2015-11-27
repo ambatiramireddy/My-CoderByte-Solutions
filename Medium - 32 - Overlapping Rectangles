@@ -13,7 +13,7 @@ function OverlappingRectangles(strArr) {
     var overlapHeight = (r1.bottom > r2.bottom) ? r2.bottom - r1.top : r1.bottom - r2.top;
     var overlapArea = overlapWidth * overlapHeight;
 
-    if (overlapArea == 0)
+    if (overlapArea < 0)
         return 0;
     else
         return Math.floor(r1Width / overlapWidth) * Math.floor(r1Height / overlapHeight);
