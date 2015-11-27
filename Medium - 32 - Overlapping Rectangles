@@ -19,15 +19,13 @@ function OverlappingRectangles(strArr) {
         return Math.floor(r1Width / overlapWidth) * Math.floor(r1Height / overlapHeight);
 }
 
+// X-Axis:left-----------------right
+// Y-Axis:
+        //top
+        //'
+        //'
+        //bottom
 function parseRectangle(rectangle) {
-    var left = rectangle[0][0];
-    var right = rectangle[2][0];
-    var top = rectangle[0][1];
-    var bottom = rectangle[1][1];
-    if (top > bottom) {
-        var temp = top;
-        top = bottom;
-        bottom = temp;
-    }
-    return { left: left, right: right, top: top, bottom: bottom };
+    var arr = [rectangle[0][1], rectangle[1][1]].sort();
+    return { left: rectangle[0][0], right: rectangle[2][0], top: arr[0], bottom: arr[1] };
 }
