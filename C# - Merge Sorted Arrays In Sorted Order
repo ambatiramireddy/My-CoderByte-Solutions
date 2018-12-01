@@ -6,7 +6,7 @@ static void MergeSortedArraysInSortedOrder()
     int i = 0, j = 0;
     while (i + j < mergedArray.Length)
     {
-        //If array2 is empty or if there are still values in array 1 and array1[i] is less than array2[j], 
+        //if array2 index goes out of bounds or if array1 value is less than array2 value 
         //then take value from array1, otherwise take from array 2
         if (j == array2.Length || (i < array1.Length && array1[i] < array2[j]))
             mergedArray[i + j] = array1[i++];
