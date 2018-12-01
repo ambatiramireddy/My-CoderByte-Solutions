@@ -1,29 +1,29 @@
 /*
-        Given a positive number X. Find all Jumping Numbers smaller than or equal to X. 
-        Jumping Number: A number is called Jumping Number if all adjacent digits in it differ by only 1. 
-        All single digit numbers are considered as Jumping Numbers.
-        For example 7, 8987 and 4343456 are Jumping numbers but 796 and 89098 are not. 
-        */
-        static int[] FindAllJumpingNumbers(int x)
+Given a positive number X. Find all Jumping Numbers smaller than or equal to X. 
+Jumping Number: A number is called Jumping Number if all adjacent digits in it differ by only 1. 
+All single digit numbers are considered as Jumping Numbers.
+For example 7, 8987 and 4343456 are Jumping numbers but 796 and 89098 are not. 
+*/
+static int[] FindAllJumpingNumbers(int x)
+{
+    List<int> jumpingNumbers = new List<int>();
+    for (int i = 0; i <= x; i++)
+    {
+        bool isJumbingNumber = true;
+        var digits = i.ToString().ToCharArray().Select(c => int.Parse(c.ToString())).ToArray();
+        for (int j = 0; j < digits.Length - 1; j++)
         {
-            List<int> jumpingNumbers = new List<int>();
-            for (int i = 0; i <= x; i++)
+            if (Math.Abs(digits[j] - digits[j + 1]) != 1)
             {
-                bool isJumbingNumber = true;
-                var digits = i.ToString().ToCharArray().Select(c => int.Parse(c.ToString())).ToArray();
-                for (int j = 0; j < digits.Length - 1; j++)
-                {
-                    if (Math.Abs(digits[j] - digits[j + 1]) != 1)
-                    {
-                        isJumbingNumber = false;
-                    }
-                }
-
-                if (isJumbingNumber)
-                {
-                    jumpingNumbers.Add(i);
-                }
+                isJumbingNumber = false;
             }
-
-            return jumpingNumbers.ToArray();
         }
+
+        if (isJumbingNumber)
+        {
+            jumpingNumbers.Add(i);
+        }
+    }
+
+    return jumpingNumbers.ToArray();
+}
