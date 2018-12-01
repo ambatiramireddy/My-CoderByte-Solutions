@@ -1,27 +1,27 @@
 /* 
-       Given an unsorted array A of size N of non-negative integers, 
-       find a continuous sub-array which adds to a given number.
-      */
-      static int[] FindContinuousSubArray(int[] a, int x)
-      {
-          List<int> ContinuousSubAarray = new List<int>();
-          for (int i = 0; i < a.Length; i++)
-          {
-              int sum = a[i];
-              for (int j = i + 1; j < a.Length; j++)
-              {
-                  sum = sum + a[j];
-                  if (sum == x)
-                  {
-                      for (int k = i; k <= j; k++)
-                      {
-                          ContinuousSubAarray.Add(a[k]);
-                      }
+Given an unsorted array A of size N of non-negative integers, 
+find a continuous sub-array which adds to a given number.
+*/
+static int[] FindContinuousSubArray(int[] a, int x)
+{
+   List<int> ContinuousSubAarray = new List<int>();
+   for (int i = 0; i < a.Length; i++)
+   {
+       int sum = a[i];
+       for (int j = i + 1; j < a.Length; j++)
+       {
+           sum = sum + a[j];
+           if (sum == x)
+           {
+               for (int k = i; k <= j; k++)
+               {
+                   ContinuousSubAarray.Add(a[k]);
+               }
 
-                      return ContinuousSubAarray.ToArray();
-                  }
-              }
-          }
+               return ContinuousSubAarray.ToArray();
+           }
+       }
+   }
 
-          return ContinuousSubAarray.ToArray();
-      }
+   return ContinuousSubAarray.ToArray();
+}
