@@ -1,0 +1,75 @@
+static string NumberToBaseNValue(long n, byte baseN)
+{
+    char[] map = null;
+
+    if (baseN == 2)
+    {
+        map = "01".ToCharArray();
+    }
+    else if (baseN == 10)
+    {
+        map = "0123456789".ToCharArray();
+    }
+    else if (baseN == 16)
+    {
+        map = "0123456789abcdef".ToCharArray();
+    }
+    else if (baseN == 62)
+    {
+        // Map to store 62 possible characters 
+        map = ("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ").ToCharArray();
+    }
+
+    string shorturl = string.Empty;
+
+    // Convert given integer id to a base N value 
+    while (n > 0)
+    {
+        shorturl += (map[n % baseN]);
+        n = n / baseN;
+    }
+
+    // Reverse shortURL to complete base conversion 
+    var shortUrlArray = shorturl.ToCharArray();
+    Array.Reverse(shortUrlArray);
+
+    return string.Join(string.Empty, shortUrlArray);
+}
+
+static long BaseNValueToNumber(string n, byte baseN)
+{
+    char[] map = null;
+
+    if (baseN == 2)
+    {
+        map = "01".ToCharArray();
+    }
+    else if (baseN == 10)
+    {
+        map = "0123456789".ToCharArray();
+    }
+    else if (baseN == 16)
+    {
+        map = "0123456789abcdef".ToCharArray();
+    }
+    else if (baseN == 62)
+    {
+        // Map to store 62 possible characters 
+        map = ("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ").ToCharArray();
+    }
+
+    long number = 0;
+    for (int i = n.Length - 1, j = 0; i >= 0; i--, j++)
+    {
+        number += Array.IndexOf(map, n[i]) * (long)Math.Pow(baseN, j);
+    }
+
+    return number;
+}
+
+public static void Main(string[] args)
+{
+    byte baseN = 62;
+    var numberToBaseN = NumberToBaseNValue(12345, baseN);
+    var baseNValueToNumber = BaseNValueToNumber(numberToBaseN, baseN);
+}
