@@ -8,218 +8,218 @@ namespace TempConsoleApp.Nodes
 {
 class DNode
 {
-public int data;
-public DNode next;
-public DNode prev;
-public DNode(int data)
-{
-    this.data = data;
-}
+    public int data;
+    public DNode next;
+    public DNode prev;
+    public DNode(int data)
+    {
+        this.data = data;
+    }
 }
 
 class DoubleLinkedList
 {
-public DNode head;
+    public DNode head;
 
-public void AddFiirst(DNode newNode)
-{
-    newNode.next = head;
-    if (head != null)
+    public void AddFirst(DNode newNode)
     {
-        head.prev = newNode;
-    }
-    head = newNode;
-}
-
-public void AddLast(DNode newNode)
-{
-    var lastNode = GetLast();
-    if (lastNode == null)
-    {
+        newNode.next = head;
+        if (head != null)
+        {
+            head.prev = newNode;
+        }
         head = newNode;
     }
-    else
-    {
-        lastNode.next = newNode;
-        newNode.prev = lastNode;
-    }
-}
 
-public DNode GetLast()
-{
-    if (head == null)
+    public void AddLast(DNode newNode)
     {
-        return null;
-    }
-
-    var current = head;
-    while (current.next != null)
-    {
-        current = current.next;
-    }
-
-    return current;
-}
-
-public DNode Find(int data)
-{
-    if (head == null)
-    {
-        return null;
-    }
-
-    var current = head;
-    while (current != null)
-    {
-        if (current.data == data)
+        var lastNode = GetLast();
+        if (lastNode == null)
         {
-            return current;
-        }
-        current = current.next;
-    }
-
-    return current;
-}
-
-public void AddAfter(DNode node, int data)
-{
-
-}
-
-public void Remove(DNode node)
-{
-    if (node != null)
-    {
-        var prev = node.prev;
-        var next = node.next;
-        if (prev != null)
-        {
-            prev.next = next;
-        }
-
-        if (next != null)
-        {
-            next.prev = prev;
-        }
-    }
-}
-
-public void Swap(DNode n1, DNode n2)
-{
-    // Nothing to do if x and y are same 
-    if (n1 == n2) return;
-
-    var n1prev = n1.prev;
-    var n2prev = n2.prev;
-    var n1next = n1.next;
-    var n2next = n2.next;
-
-    // If n1 is not head of linked list 
-    if (n1prev != null)
-    {
-        n1prev.next = n2;
-    }
-    else
-    {
-        //make n2 the new head 
-        head = n2;
-    }
-
-    if (n1.next == n2)
-    {
-        n2.next = n1;
-        n1.next = n2next;
-        if (n2next != null)
-        {
-            n2next.prev = n1;
-        }
-        n1.prev = n2;
-        n2.prev = n1prev;
-    }
-    else
-    {
-        // If n2 is not head of linked list 
-        if (n2prev != null)
-        {
-            n2prev.next = n1;
+            head = newNode;
         }
         else
         {
-            // make n1 the new head 
-            head = n1;
+            lastNode.next = newNode;
+            newNode.prev = lastNode;
         }
+    }
 
-        // Swap next pointers 
-        n1.next = n2next;
-        n2.next = n1next;
-
-        if (n1next != null)
+    public DNode GetLast()
+    {
+        if (head == null)
         {
-            n1next.prev = n2;
+            return null;
         }
 
-        if (n2next != null)
+        var current = head;
+        while (current.next != null)
         {
-            n2next.prev = n1;
+            current = current.next;
         }
 
-        // Swap prev pointers 
-        n1.prev = n2prev;
-        n2.prev = n1prev;
-    }
-}
-
-public void PrintNodes()
-{
-    if(head==null)
-    {
-        return;
+        return current;
     }
 
-    var current = head;
-    while (current != null)
+    public DNode Find(int data)
     {
-        Console.Write(current.data + " ");
-        current = current.next;
-    }
-}
+        if (head == null)
+        {
+            return null;
+        }
 
-public void PrintNodesInReverseOrder()
-{
-    if (head == null)
-    {
-        return;
+        var current = head;
+        while (current != null)
+        {
+            if (current.data == data)
+            {
+                return current;
+            }
+            current = current.next;
+        }
+
+        return current;
     }
 
-    var current = GetLast();
-    while (current != null)
+    public void AddAfter(DNode node, int data)
     {
-        Console.Write(current.data + " ");
-        current = current.prev;
+
     }
-}
+
+    public void Remove(DNode node)
+    {
+        if (node != null)
+        {
+            var prev = node.prev;
+            var next = node.next;
+            if (prev != null)
+            {
+                prev.next = next;
+            }
+
+            if (next != null)
+            {
+                next.prev = prev;
+            }
+        }
+    }
+
+    public void Swap(DNode n1, DNode n2)
+    {
+        // Nothing to do if x and y are same 
+        if (n1 == n2) return;
+
+        var n1prev = n1.prev;
+        var n2prev = n2.prev;
+        var n1next = n1.next;
+        var n2next = n2.next;
+
+        // If n1 is not head of linked list 
+        if (n1prev != null)
+        {
+            n1prev.next = n2;
+        }
+        else
+        {
+            //make n2 the new head 
+            head = n2;
+        }
+
+        if (n1.next == n2)
+        {
+            n2.next = n1;
+            n1.next = n2next;
+            if (n2next != null)
+            {
+                n2next.prev = n1;
+            }
+            n1.prev = n2;
+            n2.prev = n1prev;
+        }
+        else
+        {
+            // If n2 is not head of linked list 
+            if (n2prev != null)
+            {
+                n2prev.next = n1;
+            }
+            else
+            {
+                // make n1 the new head 
+                head = n1;
+            }
+
+            // Swap next pointers 
+            n1.next = n2next;
+            n2.next = n1next;
+
+            if (n1next != null)
+            {
+                n1next.prev = n2;
+            }
+
+            if (n2next != null)
+            {
+                n2next.prev = n1;
+            }
+
+            // Swap prev pointers 
+            n1.prev = n2prev;
+            n2.prev = n1prev;
+        }
+    }
+
+    public void PrintNodes()
+    {
+        if(head==null)
+        {
+            return;
+        }
+
+        var current = head;
+        while (current != null)
+        {
+            Console.Write(current.data + " ");
+            current = current.next;
+        }
+    }
+
+    public void PrintNodesInReverseOrder()
+    {
+        if (head == null)
+        {
+            return;
+        }
+
+        var current = GetLast();
+        while (current != null)
+        {
+            Console.Write(current.data + " ");
+            current = current.prev;
+        }
+    }
 }
 
 class DoubleLinkedListTest
 {
-static void Main()
-{
-    DoubleLinkedList list = new DoubleLinkedList();
-    list.AddLast(new DNode(10));
-    list.AddLast(new DNode(15));
-    list.AddLast(new DNode(12));
-    list.AddLast(new DNode(13));
-    list.AddLast(new DNode(20));
-    list.AddLast(new DNode(14));
+    static void Main()
+    {
+        DoubleLinkedList list = new DoubleLinkedList();
+        list.AddLast(new DNode(10));
+        list.AddLast(new DNode(15));
+        list.AddLast(new DNode(12));
+        list.AddLast(new DNode(13));
+        list.AddLast(new DNode(20));
+        list.AddLast(new DNode(14));
 
-    //list.Remove(list.Find(3));
+        //list.Remove(list.Find(3));
 
-    CommonFunctions.Run(() => list.PrintNodes(), "BeforeSwap-PrintNodes");
-    list.Swap(list.Find(12), list.Find(14));
-    CommonFunctions.Run(() => list.PrintNodes(), "AfterSwap-PrintNodes");
-    CommonFunctions.Run(() => list.PrintNodesInReverseOrder(), "AfterSwap-PrintNodesInReverse");
+        CommonFunctions.Run(() => list.PrintNodes(), "BeforeSwap-PrintNodes");
+        list.Swap(list.Find(12), list.Find(14));
+        CommonFunctions.Run(() => list.PrintNodes(), "AfterSwap-PrintNodes");
+        CommonFunctions.Run(() => list.PrintNodesInReverseOrder(), "AfterSwap-PrintNodesInReverse");
 
-    Console.ReadLine();
-}
+        Console.ReadLine();
+    }
 }
 }
