@@ -1,0 +1,102 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TempConsoleApp
+{
+    class SortingAlgorithms
+    {
+        public void BubbleSort(int[] a)
+        {
+            int temp;
+            for (int i = 0; i < a.Length; i++)
+            {
+                bool swapped = false;
+                for (int j = 0; j < a.Length - 1; j++)
+                {
+                    if (a[j] > a[j + 1])
+                    {
+                        temp = a[j];
+                        a[j] = a[j + 1];
+                        a[j + 1] = temp;
+
+                        swapped = true;
+                    }
+                }
+
+                /*if no number was swapped that means 
+                array is sorted now, break the loop.*/
+                if (!swapped)
+                {
+                    break;
+                }
+            }
+        }
+
+        public void InsertionSort(int[] a)
+        {
+            int temp;
+            for (int i = 1; i < a.Length; i++)
+            {
+                temp = a[i];
+                int j = i - 1;
+                while (j >= 0 && a[j] > temp)
+                {
+                    a[j + 1] = a[j];
+                    j--;
+                }
+                a[j + 1] = temp;
+            }
+        }
+
+        public void QuickSort(int[] a, int start, int end)
+        {
+            if (start >= end)
+            {
+                return;
+            }
+
+            int pIndex = Partition(a, start, end);
+            QuickSort(a, start, pIndex - 1);
+            QuickSort(a, pIndex + 1, end);
+        }
+
+        public int Partition(int[] a, int start, int end)
+        {
+            int pivot = a[end];
+            int pIndex = start;
+            int temp;
+            for (int i = start; i < end; i++)
+            {
+                if(a[i]<=pivot)
+                {
+                    temp = a[i];
+                    a[i] = a[pIndex];
+                    a[pIndex] = temp;
+                    pIndex++;
+                }
+            }
+
+            temp = a[pIndex];
+            a[pIndex] = a[end];
+            a[end] = temp;
+
+            return pIndex;
+        }
+    }
+
+    class SortingAlgorithmsTest
+    {
+
+        static void Main()
+        {
+            SortingAlgorithms obj = new SortingAlgorithms();
+            int[] a = new[] { 7, 2, 1, 6, 8, 5, 3, 4 };
+            obj.BubbleSort(a);
+            obj.InsertionSort(a);
+            obj.QuickSort(a, 0, a.Length - 1);
+        }
+    }
+}
