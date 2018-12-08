@@ -1,5 +1,5 @@
 /*
- Given an array representing heights of buildings. count number of buildings facing the sunset. 
+ Given an array representing heights of buildings. count number of buildings facing the sunset from left to right. 
 */
 public static int BuldingsFacingSunset(int[] a)
 {
