@@ -78,7 +78,7 @@ namespace TempConsoleApp.Nodes
                 current = current.next;
             }
 
-            return current;
+            return null;
         }
 
         public void Remove(DNode node)
