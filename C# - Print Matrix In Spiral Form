@@ -5,6 +5,7 @@ public void PrintMatrixInSpiralForm()
                   { 'k','l','m','n','o'},
                   { 'p','q','r','s','t'}
                };
+    //output: ->a->b->c->d->e->j->o->t->s->r->q->p->k->f->g->h->i->n->m->l
 
     int row = 0, column = 0;
     int lastrow = a.GetLength(0) - 1, lastColumn = a.GetLength(1) - 1;
