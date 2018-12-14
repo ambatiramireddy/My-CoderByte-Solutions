@@ -1,0 +1,44 @@
+public void PrintMatrixInSpiralForm()
+{
+    char[,] a = { { 'a','b','c','d','e'},
+                  { 'f','g','h','i','j'},
+                  { 'k','l','m','n','o'},
+                  { 'p','q','r','s','t'}
+               };
+
+    int row = 0, column = 0;
+    int lastrow = a.GetLength(0) - 1, lastColumn = a.GetLength(1) - 1;
+    string str = string.Empty;
+    while (row <= lastrow && column <= lastColumn)
+    {
+        for (int i = column; i <= lastColumn; i++)
+        {
+            str = str + "->" + a[row, i];
+        }
+        row++;
+
+        for (int i = row; i <= lastrow; i++)
+        {
+            str = str + "->" + a[i, lastColumn];
+        }
+        lastColumn--;
+
+        if (row <= lastrow)
+        {
+            for (int i = lastColumn; i >= column; i--)
+            {
+                str = str + "->" + a[lastrow, i];
+            }
+            lastrow--;
+        }
+
+        if (column <= lastColumn)
+        {
+            for (int i = lastrow; i >= row; i--)
+            {
+                str = str + "->" + a[i, column];
+            }
+            column++;
+        }
+    }
+}
