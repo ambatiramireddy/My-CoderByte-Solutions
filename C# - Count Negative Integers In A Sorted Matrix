@@ -1,11 +1,11 @@
 public void CountNegativeIntegersInASortedMatrix()
 {
-    int[,] a = { { -3, -2, -1, -1 }, { -2, 2, 3, 4 }, { 4, 5, 7, 8 } };
+    int[,] a = { { -3, -2, -1, -1 }, { -2, 2, 3, 4 }, { -4, -5, -7, -8 } };
 
     int negativeNumberCount = 0;
-    int rowCount = a.GetLength(0), colCount = a.GetLength(1);
-    int row = 0, col = colCount - 1;
-    while (row < rowCount && col >= 0)
+    int rowLength = a.GetLength(0), colLength = a.GetLength(1);
+    int row = 0, col = colLength - 1;
+    while (row < rowLength && col >= 0)
     {
         if (a[row, col] < 0)
         {
@@ -14,6 +14,7 @@ public void CountNegativeIntegersInASortedMatrix()
              * must be negative. so, just increment count and move to the next row */
             negativeNumberCount = negativeNumberCount + (col + 1);
             row++;
+            col = colLength - 1;
         }
         else
         {
