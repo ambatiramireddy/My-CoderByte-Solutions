@@ -1,11 +1,10 @@
 /*
- Given an array representing heights of buildings. count number of buildings facing the sunset from left to right (sun is on left side). 
+ Given an array representing heights of buildings. count number of buildings facing the sunset from left to right. 
 */
 public static int BuldingsFacingSunset2(int[] a)
 {
     // first building always sees sunlight
     int count = 1;
-    // Start traversing element 
     int curr_max = a[0];
     for (int i = 1; i < a.Length; i++)
     {
