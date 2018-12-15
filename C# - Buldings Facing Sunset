@@ -1,38 +1,9 @@
 /*
- Given an array representing heights of buildings. count number of buildings facing the sunset from left to right. 
+ Given an array representing heights of buildings. count number of buildings facing the sunset from left to right (sun is on left side). 
 */
-public static int BuldingsFacingSunset(int[] a)
-{
-    int buldingsFacingSunset = 0;
-    for (int i = 0; i < a.Length; i++)
-    {
-        int h = a[i];
-        bool canfaceSunset = true;
-        for (int j = i - 1; j >= 0; j--)
-        {
-            /* if any previous building's height greater 
-             * than or equal to the current building's height, 
-             * then current building can't face the sun */
-            if (a[j] >= h)
-            {
-                canfaceSunset = false;
-                break;
-            }
-        }
-
-        if(canfaceSunset)
-        {
-            buldingsFacingSunset++;
-        }
-    }
-
-    return buldingsFacingSunset;
-}
-
-// Returns count buildings that can see sunlight 
 public static int BuldingsFacingSunset2(int[] a)
 {
-    // first building always sees sunlight) 
+    // first building always sees sunlight
     int count = 1;
     // Start traversing element 
     int curr_max = a[0];
