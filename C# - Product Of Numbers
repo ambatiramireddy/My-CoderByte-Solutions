@@ -1,23 +1,20 @@
 // find product of 2 integers without using * or / operators
-public int ProductOfNumbers()
+public int ProductOfNumbers(int a, int b)
 {
-    int a = 10, b = 20;
+    if (a == 0 || b == 0)
+    {
+        return 0;
+    }
 
     int smaller = a < b ? a : b;
     int bigger = a < b ? b : a;
 
-    int result = ProductOfNumbersRecursion(smaller, bigger);
-
-    return result;
+    return ProductOfNumbersRecursion(smaller, bigger);
 }
 
 public int ProductOfNumbersRecursion(int smaller, int bigger)
 {
-    if (smaller == 0)
-    {
-        return 0;
-    }
-    else if (smaller == 1)
+    if (smaller == 1)
     {
         return bigger;
     }
