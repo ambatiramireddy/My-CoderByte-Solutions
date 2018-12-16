@@ -1,0 +1,52 @@
+public bool CheckIfArrayIsPolindrome()
+{
+    int[] a = { 1, 23, 45, 43, 2, 1 };
+
+    /* idea: convert all array values into a single decimal number from left-right 
+     * and right-left. if both numbers are equal, then array is polindrome */
+    int powerIndex = 0;
+    int sum1 = 0;
+    for (int i = 0; i < a.Length; i++)
+    {
+        int n = ReverseNumber(a[i]);
+        while (n > 0)
+        {
+            int rem = n % 10;
+            sum1 = sum1 + rem * (int)Math.Pow(10, powerIndex++);
+            n = n / 10;
+        }
+    }
+
+    powerIndex = 0;
+    int sum2 = 0;
+    for (int i = a.Length - 1; i >= 0; i--)
+    {
+        int n = a[i];
+        while (n > 0)
+        {
+            int rem = n % 10;
+            sum2 = sum2 + rem * (int)Math.Pow(10, powerIndex++);
+            n = n / 10;
+        }
+    }
+
+    if (sum1 == sum2)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+public int ReverseNumber(int n)
+{
+    int result = 0;
+    while (n > 0)
+    {
+        int rem = n % 10;
+        result = result * 10 + rem;
+        n = n / 10;
+    }
+
+    return result;
+}
