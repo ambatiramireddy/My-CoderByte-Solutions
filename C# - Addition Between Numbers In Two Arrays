@@ -3,6 +3,11 @@ public int AdditionBetweenNumbersInTwoArrays()
     int[] a = { 1, 10, 8, 9, 7 };
     int[] b = { 1, 6, 4 };
 
+    /* 1 10 8 9 7
+     *      1 6 4 
+     * -----------     
+       2  1 0 6 1 */
+
     int result = 0, power = 0;
     int addition = 0, division = 0, remainder = 0;
     int aIndex = a.Length - 1, bIndex = b.Length - 1;
