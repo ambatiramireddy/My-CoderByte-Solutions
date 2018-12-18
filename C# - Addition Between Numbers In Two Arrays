@@ -1,0 +1,30 @@
+public int AdditionBetweenNumbersInTwoArrays()
+{
+    int[] a = { 1, 10, 8, 9, 7 };
+    int[] b = { 1, 6, 4 };
+
+    int result = 0, power = 0;
+    int addition = 0, division = 0, remainder = 0;
+    int aIndex = a.Length - 1, bIndex = b.Length - 1;
+    while (aIndex >= 0 || bIndex >= 0)
+    {
+        if (aIndex >= 0 && bIndex >= 0)
+        {
+            addition = a[aIndex--] + b[bIndex--] + division;
+        }
+        else if (aIndex >= 0)
+        {
+            addition = a[aIndex--] + division;
+        }
+        else
+        {
+            addition = b[bIndex--] + division;
+        }
+
+        division = addition / 10; //this value will be carried over for next addition
+        remainder = addition % 10;
+        result = result + remainder * (int)Math.Pow(10, power++);
+    }
+
+    return result;
+}
