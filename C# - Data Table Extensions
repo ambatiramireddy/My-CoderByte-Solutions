@@ -1,5 +1,6 @@
 using AddAppAPI.Helpers;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
@@ -12,7 +13,8 @@ namespace AddAppAPI.Extensions
         {
             Type type = typeof(T);
             dt.TableName = type.UnderlyingSystemType.Name;
-            dt.AddColumns(type);
+            Dictionary<int, PropertyInfo> columnIndexAndProperties = null;
+            dt.AddColumns(type, ref columnIndexAndProperties);
 
             if (collection == null)
             {
@@ -21,46 +23,36 @@ namespace AddAppAPI.Extensions
 
             foreach (T obj in collection)
             {
-                dt.AddRow(obj, type);
+                dt.AddRow(obj, columnIndexAndProperties);
             }
 
             return dt;
         }
 
-        private static void AddColumns(this DataTable dt, Type type)
+        private static void AddColumns(this DataTable dt, Type type, ref Dictionary<int, PropertyInfo> columnIndexAndProperties)
         {
-            foreach (var p in type.GetProperties())
+            var properties = type.GetProperties();
+            columnIndexAndProperties = new Dictionary<int, PropertyInfo>(properties.Count());
+            int index = 0;
+            foreach (var p in properties)
             {
                 DataColumn column = new DataColumn();
                 column.ColumnName = p.Name;
-
-                if (CommonFunctions.IsNullableType(p.PropertyType) && p.PropertyType.IsGenericType)
-                {   // If Nullable<>, this is how we get the underlying Type...
-                    column.DataType = p.PropertyType.GenericTypeArguments.FirstOrDefault();
-                }
-                else
-                {   // True by default, so set it false
-                    column.DataType = p.PropertyType;
-                    column.AllowDBNull = false;
-                }
-
+                column.DataType = CommonFunctions.GetType(p.PropertyType);
                 dt.Columns.Add(column);
+                columnIndexAndProperties.Add(index++, p);
             }
         }
 
-        private static void AddRow(this DataTable dt, object obj, Type type)
+        private static void AddRow(this DataTable dt, object obj, Dictionary<int, PropertyInfo> columnIndexAndProperties)
         {
             DataRow row = dt.NewRow();
-            foreach (var p in type.GetProperties())
+            foreach (var kv in columnIndexAndProperties)
             {
-                if (dt.Columns.Contains(p.Name))
-                {
-                    row[p.Name] = p.GetValue(obj, null);
-                }
+                row[kv.Key] = kv.Value.GetValue(obj, null);
             }
 
             dt.Rows.Add(row);
         }
-
     }
 }
