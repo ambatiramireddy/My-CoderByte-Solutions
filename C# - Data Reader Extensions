@@ -1,0 +1,69 @@
+using AddAppAPI.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Reflection;
+
+namespace AddAppAPI.Extensions
+{
+    public static class DataReaderExtensions
+    {
+        public static T ToObject<T>(this SqlDataReader reader) where T : class, new()
+        {
+            var matchedProperties = GetMatchedProperties<T>(reader);
+            T t = new T();
+            if (reader.Read())
+            {
+                foreach (var kv in matchedProperties)
+                {
+                    if (!reader.IsDBNull(kv.Key))
+                    {
+                        var tuple = kv.Value;
+                        tuple.Item1.SetValue(t, System.Convert.ChangeType(reader.GetValue(kv.Key), tuple.Item2), null);
+                    }
+                }
+            }
+
+            return t;
+        }
+
+        public static List<T> ToList<T>(this SqlDataReader reader) where T : class, new()
+        {
+            var matchedProperties = GetMatchedProperties<T>(reader);
+            var list = new List<T>();
+            while (reader.Read())
+            {
+                var t = new T();
+                foreach (var kv in matchedProperties)
+                {
+                    if (!reader.IsDBNull(kv.Key))
+                    {
+                        var tuple = kv.Value;
+                        tuple.Item1.SetValue(t, Convert.ChangeType(reader.GetValue(kv.Key), tuple.Item2), null);
+                    }
+                }
+                list.Add(t);
+            }
+
+            return list;
+        }
+
+        private static Dictionary<int, Tuple<PropertyInfo, Type>> GetMatchedProperties<T>(SqlDataReader reader)
+        {
+            Type type = typeof(T);
+            var members = type.GetProperties();
+            Dictionary<int, Tuple<PropertyInfo, Type>> matchedProperties = new Dictionary<int, Tuple<PropertyInfo, Type>>();
+            for (int i = 0; i < reader.FieldCount; i++)
+            {
+                var member = members.FirstOrDefault(m => m.Name.Equals(reader.GetName(i), StringComparison.OrdinalIgnoreCase));
+                if (member != null)
+                {
+                    matchedProperties.Add(i, Tuple.Create(member, CommonFunctions.GetType(member.PropertyType)));
+                }
+            }
+
+            return matchedProperties;
+        }
+    }
+}
