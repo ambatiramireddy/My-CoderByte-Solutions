@@ -12,20 +12,22 @@ namespace AddAppAPI.Extensions
         public static T ToObject<T>(this SqlDataReader reader) where T : class, new()
         {
             var matchedProperties = GetMatchedProperties<T>(reader);
-            T t = new T();
             if (reader.Read())
             {
+                T t = new T();
                 foreach (var kv in matchedProperties)
                 {
                     if (!reader.IsDBNull(kv.Key))
                     {
                         var tuple = kv.Value;
-                        tuple.Item1.SetValue(t, System.Convert.ChangeType(reader.GetValue(kv.Key), tuple.Item2), null);
+                        tuple.Item1.SetValue(t, Convert.ChangeType(reader.GetValue(kv.Key), tuple.Item2), null);
                     }
                 }
+
+                return t;
             }
 
-            return t;
+            return null;
         }
 
         public static List<T> ToList<T>(this SqlDataReader reader) where T : class, new()
@@ -52,14 +54,15 @@ namespace AddAppAPI.Extensions
         private static Dictionary<int, Tuple<PropertyInfo, Type>> GetMatchedProperties<T>(SqlDataReader reader)
         {
             Type type = typeof(T);
-            var members = type.GetProperties();
-            Dictionary<int, Tuple<PropertyInfo, Type>> matchedProperties = new Dictionary<int, Tuple<PropertyInfo, Type>>();
+            var properties = type.GetProperties();
+            Dictionary<int, Tuple<PropertyInfo, Type>> matchedProperties = new Dictionary<int, Tuple<PropertyInfo, Type>>(properties.Count());
             for (int i = 0; i < reader.FieldCount; i++)
             {
-                var member = members.FirstOrDefault(m => m.Name.Equals(reader.GetName(i), StringComparison.OrdinalIgnoreCase));
-                if (member != null)
+                var property = properties.FirstOrDefault(m => m.Name.Equals(reader.GetName(i), StringComparison.OrdinalIgnoreCase));
+                if (property != null)
                 {
-                    matchedProperties.Add(i, Tuple.Create(member, CommonFunctions.GetType(member.PropertyType)));
+                    //CommonFunctions.GetType is used to get type from Nullable type. ex: Nullable<int>
+                    matchedProperties.Add(i, Tuple.Create(property, CommonFunctions.GetType(property.PropertyType)));
                 }
             }
 
