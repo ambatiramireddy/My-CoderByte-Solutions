@@ -1,0 +1,66 @@
+using AddAppAPI.Helpers;
+using System;
+using System.Data;
+using System.Linq;
+using System.Reflection;
+
+namespace AddAppAPI.Extensions
+{
+    public static class DataTableExtensions
+    {
+        public static DataTable Fill<T>(this DataTable dt, params T[] collection) where T : class, new()
+        {
+            Type type = typeof(T);
+            dt.TableName = type.UnderlyingSystemType.Name;
+            dt.AddColumns(type);
+
+            if (collection == null)
+            {
+                return dt;
+            }
+
+            foreach (T obj in collection)
+            {
+                dt.AddRow(obj, type);
+            }
+
+            return dt;
+        }
+
+        private static void AddColumns(this DataTable dt, Type type)
+        {
+            foreach (var p in type.GetProperties())
+            {
+                DataColumn column = new DataColumn();
+                column.ColumnName = p.Name;
+
+                if (CommonFunctions.IsNullableType(p.PropertyType) && p.PropertyType.IsGenericType)
+                {   // If Nullable<>, this is how we get the underlying Type...
+                    column.DataType = p.PropertyType.GenericTypeArguments.FirstOrDefault();
+                }
+                else
+                {   // True by default, so set it false
+                    column.DataType = p.PropertyType;
+                    column.AllowDBNull = false;
+                }
+
+                dt.Columns.Add(column);
+            }
+        }
+
+        private static void AddRow(this DataTable dt, object obj, Type type)
+        {
+            DataRow row = dt.NewRow();
+            foreach (var p in type.GetProperties())
+            {
+                if (dt.Columns.Contains(p.Name))
+                {
+                    row[p.Name] = p.GetValue(obj, null);
+                }
+            }
+
+            dt.Rows.Add(row);
+        }
+
+    }
+}
