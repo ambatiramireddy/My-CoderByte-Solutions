@@ -1,0 +1,104 @@
+using AddAppAPI.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
+
+namespace AddAppAPI.Helpers
+{
+    public class SqlHelper<T> : ISqlHelper<T> where T : class, new()
+    {
+        private string connectionString;
+
+        public SqlHelper()
+        {
+            this.connectionString = ConfigurationManager.ConnectionStrings["TestConnection"].ConnectionString;
+        }
+
+        public SqlHelper(string connectionString)
+        {
+            this.connectionString = connectionString;
+        }
+
+        public async Task<T> SelectOneAsync(string sqlStatement, Dictionary<string, object> parameters)
+        {
+            T item = null;
+            using (var con = this.GetConnection())
+            {
+                using (var cmd = new SqlCommand(sqlStatement, con))
+                {
+                    await con.OpenAsync();
+                    foreach (var kv in parameters)
+                    {
+                        cmd.Parameters.AddWithValue($"@{kv.Key}", kv.Value);
+                    }
+                    
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        item = reader.ToObject<T>();
+                    }
+                }
+            }
+
+            return item;
+        }
+
+        public async Task<List<T>> SelectAllAsync(string sqlStatement)
+        {
+            List<T> items = null;
+            using (var con = this.GetConnection())
+            {
+                using (var cmd = new SqlCommand(sqlStatement, con))
+                {
+                    await con.OpenAsync();
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        items = reader.ToList<T>();
+                    }
+                }
+            }
+
+            return items;
+        }
+
+        public async Task InsertOrUpdateAsync(string sqlStatement, T item)
+        {
+            try
+            {
+                using (var con = this.GetConnection())
+                {
+                    using (var cmd = new SqlCommand(sqlStatement, con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue($"@{typeof(T).Name.ToLower()}", new DataTable().Fill<T>(item));
+                        await con.OpenAsync();
+                        await cmd.ExecuteNonQueryAsync();
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627) 
+                {
+                    // violation of primary key
+                }
+
+                throw ex;
+            }
+        }
+
+        public Task DeleteAsync(string sqlStatement, Dictionary<string, object> parameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        private SqlConnection GetConnection()
+        {
+            return new SqlConnection(this.connectionString);
+        }
+    }
+}
