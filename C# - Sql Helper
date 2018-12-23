@@ -13,24 +13,43 @@ namespace AddAppAPI.Helpers
     public class SqlHelper<T> : ISqlHelper<T> where T : class, new()
     {
         private string connectionString;
+        private string tableName;
+        private string selectProcName;
+        private string selectAllProcName;
+        private string insertProcName;
+        private string updateProcName;
+        private string deleteProcName;
 
         public SqlHelper()
         {
             this.connectionString = ConfigurationManager.ConnectionStrings["TestConnection"].ConnectionString;
+            this.Initialize();
         }
 
         public SqlHelper(string connectionString)
         {
             this.connectionString = connectionString;
+            this.Initialize();
         }
 
-        public async Task<T> SelectOneAsync(string sqlStatement, Dictionary<string, object> parameters)
+        public void Initialize()
+        {
+            this.tableName = typeof(T).Name;
+            this.selectProcName = string.Format("usp_Select_{0}", tableName);
+            this.selectAllProcName = string.Format("usp_SelectAll_{0}s", tableName);
+            this.insertProcName = string.Format("usp_Insert_{0}", tableName);
+            this.updateProcName = string.Format("usp_Update_{0}", tableName);
+            this.deleteProcName = string.Format("usp_Delete_{0}", tableName);
+        }
+
+        public async Task<T> SelectOneAsync(Dictionary<string, object> parameters)
         {
             T item = null;
             using (var con = this.GetConnection())
             {
-                using (var cmd = new SqlCommand(sqlStatement, con))
+                using (var cmd = new SqlCommand(this.selectProcName, con))
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
                     await con.OpenAsync();
                     foreach (var kv in parameters)
                     {
@@ -47,13 +66,14 @@ namespace AddAppAPI.Helpers
             return item;
         }
 
-        public async Task<List<T>> SelectAllAsync(string sqlStatement)
+        public async Task<List<T>> SelectAllAsync()
         {
             List<T> items = null;
             using (var con = this.GetConnection())
             {
-                using (var cmd = new SqlCommand(sqlStatement, con))
+                using (var cmd = new SqlCommand(this.selectAllProcName, con))
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
                     await con.OpenAsync();
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
@@ -65,35 +85,72 @@ namespace AddAppAPI.Helpers
             return items;
         }
 
-        public async Task InsertOrUpdateAsync(string sqlStatement, T item)
+        public async Task<bool> InsertAsync(T item)
         {
+            int rowsAffected = 0;
             try
             {
                 using (var con = this.GetConnection())
                 {
-                    using (var cmd = new SqlCommand(sqlStatement, con))
+                    using (var cmd = new SqlCommand(this.insertProcName, con))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue($"@{typeof(T).Name.ToLower()}", new DataTable().Fill<T>(item));
                         await con.OpenAsync();
-                        await cmd.ExecuteNonQueryAsync();
+                        rowsAffected = await cmd.ExecuteNonQueryAsync();
                     }
                 }
             }
             catch (SqlException ex)
             {
-                if (ex.Number == 2627) 
+                if (ex.Number == 2627)
                 {
                     // violation of primary key
                 }
 
                 throw ex;
             }
+
+            return rowsAffected == 0 ? false : true;
         }
 
-        public Task DeleteAsync(string sqlStatement, Dictionary<string, object> parameters)
+        public async Task<bool> UpdateAsync(T item)
         {
-            throw new NotImplementedException();
+            int rowsAffected = 0;
+            using (var con = this.GetConnection())
+            {
+                using (var cmd = new SqlCommand(this.updateProcName, con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue($"@{typeof(T).Name.ToLower()}", new DataTable().Fill<T>(item));
+                    await con.OpenAsync();
+                    rowsAffected = await cmd.ExecuteNonQueryAsync();
+                }
+            }
+
+            return rowsAffected == 0 ? false : true;
+        }
+
+
+        public async Task<bool> DeleteAsync(Dictionary<string, object> parameters)
+        {
+            int rowsAffected = 0;
+            using (var con = this.GetConnection())
+            {
+                using (var cmd = new SqlCommand(this.deleteProcName, con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    await con.OpenAsync();
+                    foreach (var kv in parameters)
+                    {
+                        cmd.Parameters.AddWithValue($"@{kv.Key}", kv.Value);
+                    }
+
+                    rowsAffected = await cmd.ExecuteNonQueryAsync();
+                }
+            }
+
+            return rowsAffected == 0 ? false : true;
         }
 
         private SqlConnection GetConnection()
