@@ -49,7 +49,15 @@ namespace AddAppAPI.Extensions
             DataRow row = dt.NewRow();
             foreach (var kv in columnIndexAndProperties)
             {
-                row[kv.Key] = kv.Value.GetValue(obj, null);
+                var value = kv.Value.GetValue(obj, null);
+                if (value == null)
+                {
+                    row[kv.Key] = DBNull.Value;
+                }
+                else
+                {
+                    row[kv.Key] = value;
+                }
             }
 
             dt.Rows.Add(row);
