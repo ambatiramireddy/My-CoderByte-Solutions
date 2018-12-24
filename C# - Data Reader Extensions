@@ -58,7 +58,9 @@ namespace AddAppAPI.Extensions
             Dictionary<int, Tuple<PropertyInfo, Type>> matchedProperties = new Dictionary<int, Tuple<PropertyInfo, Type>>(properties.Count());
             for (int i = 0; i < reader.FieldCount; i++)
             {
-                var property = properties.FirstOrDefault(m => m.Name.Equals(reader.GetName(i), StringComparison.OrdinalIgnoreCase));
+                //if C# property name is EmpId, db column can be [emp id] or emp_id, or empid
+                var dbColumnName = string.Join(string.Empty, reader.GetName(i).Split(" _".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+                var property = properties.FirstOrDefault(m => m.Name.Equals(dbColumnName, StringComparison.OrdinalIgnoreCase));
                 if (property != null)
                 {
                     //CommonFunctions.GetType is used to get type from Nullable type. ex: Nullable<int>
