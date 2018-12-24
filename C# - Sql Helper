@@ -95,7 +95,7 @@ namespace AddAppAPI.Helpers
                     using (var cmd = new SqlCommand(this.insertProcName, con))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue($"@{typeof(T).Name.ToLower()}", new DataTable().Fill<T>(item));
+                        cmd.Parameters.AddWithValue($"@{this.tableName}", new DataTable().Fill<T>(item));
                         await con.OpenAsync();
                         rowsAffected = await cmd.ExecuteNonQueryAsync();
                     }
@@ -122,7 +122,7 @@ namespace AddAppAPI.Helpers
                 using (var cmd = new SqlCommand(this.updateProcName, con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue($"@{typeof(T).Name.ToLower()}", new DataTable().Fill<T>(item));
+                    cmd.Parameters.AddWithValue($"@{this.tableName}", new DataTable().Fill<T>(item));
                     await con.OpenAsync();
                     rowsAffected = await cmd.ExecuteNonQueryAsync();
                 }
