@@ -51,6 +51,17 @@ namespace AddAppAPI.Extensions
             return list;
         }
 
+        public static Dictionary<I, N> ToDictionary<I, N>(this SqlDataReader reader)
+        {
+            var dictionary = new Dictionary<I, N>();
+            while (reader.Read())
+            {
+                dictionary.Add((I)reader.GetValue(0), (N)reader.GetValue(1));
+            }
+
+            return dictionary;
+        }
+
         private static Dictionary<int, Tuple<PropertyInfo, Type>> GetMatchedProperties<T>(SqlDataReader reader)
         {
             Type type = typeof(T);
@@ -59,7 +70,7 @@ namespace AddAppAPI.Extensions
             for (int i = 0; i < reader.FieldCount; i++)
             {
                 //if C# property name is EmpId, db column can be [emp id] or emp_id, or empid
-                var dbColumnName = string.Join(string.Empty, reader.GetName(i).Split(" _".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+                var dbColumnName = string.Join(string.Empty, reader.GetName(i).Split(" _".ToCharArray()));
                 var property = properties.FirstOrDefault(m => m.Name.Equals(dbColumnName, StringComparison.OrdinalIgnoreCase));
                 if (property != null)
                 {
