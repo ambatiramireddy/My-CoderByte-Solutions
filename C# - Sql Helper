@@ -12,13 +12,14 @@ namespace AddAppAPI.Helpers
 {
     public class SqlHelper<T> : ISqlHelper<T> where T : class, new()
     {
-        private string connectionString;
-        private string tableName;
-        private string selectProcName;
-        private string selectAllProcName;
-        private string insertProcName;
-        private string updateProcName;
-        private string deleteProcName;
+        string connectionString;
+        string tableName;
+        string selectProcName;
+        string selectAllProcName;
+        string selectIdNamePairsProcName;
+        string insertProcName;
+        string updateProcName;
+        string deleteProcName;
 
         public SqlHelper()
         {
@@ -37,6 +38,7 @@ namespace AddAppAPI.Helpers
             this.tableName = typeof(T).Name;
             this.selectProcName = string.Format("usp_Select_{0}", tableName);
             this.selectAllProcName = string.Format("usp_SelectAll_{0}s", tableName);
+            this.selectIdNamePairsProcName = string.Format("usp_Select_{0}_IdNamePairs", tableName);
             this.insertProcName = string.Format("usp_Insert_{0}", tableName);
             this.updateProcName = string.Format("usp_Update_{0}", tableName);
             this.deleteProcName = string.Format("usp_Delete_{0}", tableName);
@@ -83,6 +85,25 @@ namespace AddAppAPI.Helpers
             }
 
             return items;
+        }
+
+        public async Task<Dictionary<I, N>> SelectIdNamePairsAsync<I, N>()
+        {
+            Dictionary<I, N> idNamePairs = null;
+            using (var con = this.GetConnection())
+            {
+                using (var cmd = new SqlCommand(this.selectIdNamePairsProcName, con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    await con.OpenAsync();
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        idNamePairs = reader.ToDictionary<I, N>();
+                    }
+                }
+            }
+
+            return idNamePairs;
         }
 
         public async Task<bool> InsertAsync(T item)
